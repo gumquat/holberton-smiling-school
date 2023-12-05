@@ -7,30 +7,32 @@ const popularVideos = document.querySelector("#popularVideos");
 // Targets 'latest videos section'
 const latestVideos = document.querySelector("#latestVideos");
 
-$(document).ready(function () { // fetch quotes on page load
-  // fetchQuotes if the page is index.html
+$(document).ready(function () { // fetch() quotes on page load
+  // populateQuotes if the page is index.html
   console.log(window.location.pathname);
   if (window.location.pathname == "/0-homepage.html") {
     loader.classList.remove("d-none");
-    fetchQuotes();
-    fetchVideos(popularVideos);
-    // fetchVideos(latestVideos);
+    populateQuotes();
+    populateVideos(popularVideos);
+    // populateVideos code goes HERE
   }
 
+  //if the current page is 'pricing.html'
   if (window.location.pathname == "/0-pricing.html") {
+    //remove the 'd-none' class from the loader
     loader.classList.remove("d-none");
-    fetchQuotes();
+    //fetch() the quotes
+    populateQuotes();
   }
 
 });
 
-function fetchQuotes() {  // Fetch() quotes from the given API
-  // add in the loader HERE
+function populateQuotes() {  // fetch() json text:'quotes' from the given API
   fetch("https://smileschool-api.hbtn.info/quotes")
-    .then((response) => response.json())
+    .then((response) => response.json()) //convert response to JSON
     .then((quotes) => {
-      loader.classList.add("d-none"); // remove the loader & text-center HERE
-      quoteSection.classList.remove("text-center");
+      loader.classList.add("d-none"); // remove d-none from loader
+      quoteSection.classList.remove("text-center"); // remove 'text-center' class from quote section
 
       console.log(quotes); // log to console for QA
       // loop thru 'quotes:text', add them to the page
@@ -44,11 +46,11 @@ function fetchQuotes() {  // Fetch() quotes from the given API
         // create the carousel-item
         let carouselItem = document.createElement("div");
         carouselItem.classList.add("carousel-item");
-
+        //if the quote id is 1, add class 'active' to the carousel item
         if (quote.id == 1) {
           carouselItem.classList.add("active");
         }
-
+        //create the rest of the carousel items and append them to the webpage
         let carouselRow = document.createElement("div");
         carouselRow.classList.add("row", "mx-auto", "align-items-center");
 
@@ -79,15 +81,15 @@ function fetchQuotes() {  // Fetch() quotes from the given API
         personTitle.innerHTML = title;
 
         // append all elements to the page, remove the loader
-        // quotesection appending
+        // Append Quote Section
         quoteSection.appendChild(carouselItem);
-        // carousel appending
+        // Append Carousel Formatting & Data
         carouselItem.appendChild(carouselRow);
         carouselRow.appendChild(carouselCol);
         carouselCol.appendChild(carouselImg);
         carouselRow.appendChild(carouselCol2);
         carouselCol2.appendChild(quoteText);
-        // quote appending
+        // Append Quotes
         quoteText.appendChild(quoteParagraph);
         quoteText.appendChild(personName);
         quoteText.appendChild(personTitle);
@@ -98,39 +100,37 @@ function fetchQuotes() {  // Fetch() quotes from the given API
     });
 }
 
-// Fetch() the vids from the given API
-function fetchVideos(section) { 
-  // check which 'section' is being called
+// fetch() the vids from the given API
+function populateVideos(section) { 
+  // if the section is 'popular videos' ...
   if (section == popularVideos) {
-    fetch("https://smileschool-api.hbtn.info/popular-tutorials")
-      .then((response) => response.json())
+    fetch("https://smileschool-api.hbtn.info/popular-tutorials") //fetch() from the API
+      .then((response) => response.json()) //convert the response to JSON
       .then((videos) => {
-        console.log(videos); // log for QA
+        console.log(videos); // log to console for QA
 
-        loader.classList.add("d-none"); // remove the loader & text-center HERE
-        section.classList.remove("text-center");
+        loader.classList.add("d-none"); // remove 'd-none' from loader
+        section.classList.remove("text-center"); // remove text-center from the section
 
-        // loop thru the vids, add them to the page
+        // loop thru the vids, add them to the webpage
         videos.forEach((video) => {
 
           // set the variables for the video info
-          let videoPreview = video.thumb_url;
+          let videoThumb = video.thumb_url;
           let videoTitle = video.title;
           let subTitle = video.sub-title;
-          let authorPhoto = video.author_pic_url;
+          let authorPic = video.author_pic_url;
           let authorName = video.author;
-          let ratingStars = video.star;
+          let rateStars = video.star;
           let videoDuration = video.duration;
 
-          // create the carousel-items, the first one will be active
+          // create the carousel-item, the first one will be our "active" one
           let carouselItem = document.createElement("div");
           carouselItem.classList.add("carousel-item");
-
+          // if the video id is 1, add the 'active' class to the carousel item
           if (video.id == 1) {
             carouselItem.classList.add("active");
           }
-
-
         })
 
     })
