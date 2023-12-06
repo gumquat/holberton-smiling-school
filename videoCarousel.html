@@ -63,7 +63,7 @@
           </button>
           <a
             class="navbar-brand mx-auto d-flex flex-column flex-sm-row align-items-center mt-3"
-            href="2-homepage.html"
+            href="homepage.html"
           >
             <img
               src="images/smile_off.png"
@@ -81,12 +81,12 @@
           <div class="collapse navbar-collapse text-center mt-3" id="navbarNav">
             <ul class="navbar-nav ml-auto font-weight-bold">
               <li class="nav-item">
-                <a class="nav-link text-white px-1" href="0-courses.html"
+                <a class="nav-link text-white px-1" href="courses.html"
                   >COURSES</a
                 >
               </li>
               <li class="nav-item px-0 px-sm-5 py-2 py-sm-0">
-                <a class="nav-link text-white px-1" href="0-pricing.html"
+                <a class="nav-link text-white px-1" href="pricing.html"
                   >PRICING</a
                 >
               </li>
@@ -142,20 +142,16 @@
       </div>
     </header>
     <main class="main">
-
-      <!-- Quotes Section -->
-
+      <!-- CAROUSEL -->
       <section class="quotes section d-flex align-items-center">
-        <div class="container">
+        <div class="loader" id="loading-quotes"></div>
+        <div class="container d-none" id="quotes-container">
           <div
             id="carouselExampleControls"
             class="carousel slide"
             data-ride="carousel"
           >
-            <div class="carousel-inner text-center" id="quote-carousel">
-              <div class="spinner-border text-white" style="width: 5rem; height: 5rem;" role="status" id="loader">
-                <span class="sr-only">Loading...</span>
-              </div>
+            <div class="carousel-inner" id="quote-carousel">
             </div>
             <a
               class="carousel-control-prev arrow-left"
@@ -186,9 +182,7 @@
           </div>
         </div>
       </section>
-
-      <!-- Popular Videos -->
-
+      <!-- POPULAR TUTORIALS -->
       <section class="popular section d-flex align-items-center">
         <div class="container">
           <header class="section-header">
@@ -2013,11 +2007,5 @@
         </div>
       </div>
     </footer>
-
-      <!-- Scripts -->
-
-      <script src="./scripts.js"></script>
-    </body>
-
-  </html>
+  </body>
 </html>

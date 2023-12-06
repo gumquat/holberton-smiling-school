@@ -43,6 +43,7 @@
     />
   </head>
   <body class="body">
+    <!--HEADER-->
     <header class="header">
       <div class="container">
         <nav class="navbar navbar-expand-sm navbar-dark pt-4 px-0">
@@ -187,7 +188,7 @@
 
       <!-- Popular Videos -->
 
-      <section class="popular section d-flex align-items-center">
+      <section class="popular section">
         <div class="container">
           <header class="section-header">
             <h2 class="text-center">
@@ -198,13 +199,15 @@
 
           <div class="videoSlider" id="videoSlider"></div>
             <button type="button"
-            class="slick-prev slick-arrow"
-            style="display: block;"
-            role="button">Previous</button>
+              class="slick-prev slick-arrow"
+              style="display: block;"
+              role="button">Previous
+            </button>
             <button type="button"
-            class="slick-next slick-arrow"
-            style="display: block;" 
-            role="button">Next</button>
+              class="slick-next slick-arrow"
+              style="display: block;" 
+              role="button">Next
+          </button>
           </div>
       </section>
 
@@ -290,16 +293,17 @@
             data-ride="carousel"
           >
             <div class="carousel-inner" id="latestVideos">
-              <div class="carousel-item active">
-                <div class="row align-items-center mx-auto">
-                  <div
-                    class="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center"
-                  >
-                    <div class="card">
+              <div class="row align-items-center mx-auto"></div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-3 d-flex justify-content-center justify-content-md-end justify-content-lg-center"></div>
+              <div class="card">
+                <img src="images/thumbnail_4.jpg"
+                class="card-img-top"
+              </div>
+              <div class="card-img-overlay text-center"></div>
                       <img
-                        src="images/thumbnail_4.jpg"
-                        class="card-img-top"
-                        alt="Video thumbnail"
+                        src="images/play.png.jpg"
+                        class="align-self-center play-overlay"
+                        width="64px"
                       />
                       <div class="card-img-overlay text-center">
                         <img

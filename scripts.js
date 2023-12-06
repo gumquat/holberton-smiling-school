@@ -1,3 +1,9 @@
+//perform on load
+$(document).ready(function(){
+  populateTutorials();
+  populateLatest();
+});
+
 // Targets 'quote section'
 const quoteSection = document.querySelector("#quote-carousel")
 // Targets 'loader'
@@ -8,25 +14,23 @@ const popularVideos = document.querySelector("#popularVideos");
 const latestVideos = document.querySelector("#latestVideos");
 
 $(document).ready(function () { // fetch() quotes on page load
-  // populateQuotes if the page is index.html
+  // populateQuotes if the page is any of the homepages
   console.log(window.location.pathname);
-  if (window.location.pathname == "/0-homepage.html") {
+  if (window.location.pathname == "/0-homepage.html" || window.location.pathname == "/1-homepage.html" || window.location.pathname == "/2-homepage.html") {
     loader.classList.remove("d-none");
     populateQuotes();
-    populateVideos(popularVideos);
-    // populateVideos code goes HERE
+    //populateTutorials;
   }
 
   //if the current page is 'pricing.html'
-  if (window.location.pathname == "/0-pricing.html") {
+  if (window.location.pathname == "/0-pricing.html" || "/1-pricing.html" || "/2-pricing.html") {
     //remove the 'd-none' class from the loader
     loader.classList.remove("d-none");
-    //fetch() the quotes
-    populateQuotes();
   }
 
 });
 
+//FETCH() to reach API below
 function populateQuotes() {  // fetch() json text:'quotes' from the given API
   fetch("https://smileschool-api.hbtn.info/quotes")
     .then((response) => response.json()) //convert response to JSON
@@ -100,6 +104,187 @@ function populateQuotes() {  // fetch() json text:'quotes' from the given API
     });
 }
 
+//AJAX to reach API below
+// Function to populate the tutorials carousel
+function populateTutorials() {
+  // Make an AJAX call to the tutorials API
+  $.ajax({
+      // The URL of the API
+      url: "https://smileschool-api.hbtn.info/popular-tutorials",
+      // The HTTP method to use
+      method: "GET",
+      // A function to be executed if the AJAX call is successful
+      success: function(response){
+          // Select the HTML element with the id 'tutorial-carousel'
+          const quoteCarousel = $('#tutorial-carousel');
+          
+          // Iterate over each item in the response array
+          response.forEach(function makeCarouselItem(tutorial, index) {
+              // Create a new HTML structure for each tutorial
+              const card = $('<div>').addClass('card p-3');
+              const thumbnail = $('<img>').addClass('card-img-top').attr('src', tutorial['thumb_url']);
+              const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
+              const playButton = $('<img>').addClass('mx-auto my-auto play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+              const cardBody = $('<div>').addClass('card-body');
+              const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(tutorial['title']);
+              const cardPrg = $('<p>').addClass('card-text text-muted').text(tutorial['sub-title']);
+              const creator = $('<div>').addClass('creator d-flex align-items-center');
+              const creatorImg = $('<img>').addClass('rounded-circle').attr('src', tutorial['author_pic_url']).attr('width', '30px');
+              const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(tutorial['author']);
+              const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
+              const ratingDiv = $('<div>').addClass('rating d-flex');
+              // Create a full or empty star image for each rating level
+              for(let i = 1; i < 6; i++){
+                if(i <= tutorial['star']) {
+                    const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px').attr('height', '15px');
+                    ratingDiv.append(fullStar);
+                }
+                else {
+                    const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px').attr('height', '15px');
+                    ratingDiv.append(emptyStar);
+                }
+              }
+              // Create a time element with the tutorial's duration
+              const time = $('<span>').addClass('main-color').text(tutorial['duration']);
+              
+              // Append the rating div and time to the card footer
+              cardFooter.append(ratingDiv, time);
+              // Append the creator image and name to the creator div
+              creator.append(creatorImg, creatorName);
+              // Append the title, paragraph, creator, and card footer to the card body
+              cardBody.append(cardTitle, cardPrg, creator, cardFooter);
+              // Append the play button to the card overlay
+              cardOverlay.append(playButton);
+              // Append the thumbnail, card overlay, and card body to the card
+              card.append(thumbnail, cardOverlay, cardBody);
+              // Append the card to the quote carousel
+              quoteCarousel.append(card);
+          });
+          // Initialize the slick carousel with specific settings
+          $('#tutorial-carousel').slick({
+              slidesToShow: 4,
+              slidesToScroll: 1,
+              prevArrow: $('.carousel-control-prev'),
+              nextArrow: $('.carousel-control-next'),
+              responsive: [
+                {
+                  breakpoint: 775,
+                  settings: {
+                    slidesToShow: 2
+                  }
+                },
+                {
+                  breakpoint: 575,
+                  settings: {
+                    slidesToShow: 1
+                  }
+                }
+                ]
+            });
+          // Hide the loading indicator and show the tutorial carousel
+          $('#loading-tutorials').addClass('d-none');
+          $('#tutorial-carousel').removeClass('d-none');
+      },
+      // A function to be executed if the AJAX call fails
+      error: function() {
+          // Display an error message
+          alert("Error loading tutorials");
+      }
+  })
+}
+
+
+// Function to populate the latest videos carousel
+function populateLatest() {
+  // Make an AJAX call to the latest videos API
+  $.ajax({
+     // The URL of the API
+    url: "https://smileschool-api.hbtn.info/latest-videos",
+    // The HTTP method to use
+    method: "GET",
+    // A function to be executed if the AJAX call is successful
+    success: function(response){
+        // Select the HTML element with the id 'latest-carousel'
+        const quoteCarousel = $('#latest-carousel');
+        
+        // Iterate over each item in the response array
+        response.forEach(function makeCarouselItem(tutorial, index) {
+            // Create a new HTML structure for each video
+            const card = $('<div>').addClass('card p-3');
+            const thumbnail = $('<img>').addClass('card-img-top').attr('src', tutorial['thumb_url']);
+            const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
+            const playButton = $('<img>').addClass('mx-auto my-auto play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+            const cardBody = $('<div>').addClass('card-body');
+            const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(tutorial['title']);
+            const cardPrg = $('<p>').addClass('card-text text-muted').text(tutorial['sub-title']);
+            const creator = $('<div>').addClass('creator d-flex align-items-center');
+            const creatorImg = $('<img>').addClass('rounded-circle').attr('src', tutorial['author_pic_url']).attr('width', '30px');
+            const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(tutorial['author']);
+            const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
+            const ratingDiv = $('<div>').addClass('rating d-flex');
+            // Create a full or empty star image for each rating level
+            for(let i = 1; i < 6; i++){
+              if(i <= tutorial['star']) {
+                  const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px').attr('height', '15px');
+                  ratingDiv.append(fullStar);
+              }
+              else {
+                  const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px').attr('height', '15px');
+                  ratingDiv.append(emptyStar);
+              }
+            }
+            // Create a time element with the video's duration
+            const time = $('<span>').addClass('main-color').text(tutorial['duration']);
+            
+            // Append the rating div and time to the card footer
+            cardFooter.append(ratingDiv, time);
+            // Append the creator image and name to the creator div
+            creator.append(creatorImg, creatorName);
+            // Append the title, paragraph, creator, and card footer to the card body
+            cardBody.append(cardTitle, cardPrg, creator, cardFooter);
+            // Append the play button to the card overlay
+            cardOverlay.append(playButton);
+            // Append the thumbnail, card overlay, and card body to the card
+            card.append(thumbnail, cardOverlay, cardBody);
+            // Append the card to the quote carousel
+            quoteCarousel.append(card);
+        });
+        // Initialize the Slick carousel with specific settings
+        $('#latest-carousel').slick({
+            slidesToShow: 4,
+            slidesToScroll: 1,
+            prevArrow: $('.prev2'),
+            nextArrow: $('.next2'),
+            responsive: [
+              {
+                breakpoint: 775,
+                settings: {
+                  slidesToShow: 2
+                }
+              },
+              {
+                breakpoint: 575,
+                settings: {
+                  slidesToShow: 1
+                }
+              }
+              ]
+          });
+        // Hide the loading indicator and show the latest videos carousel
+        $('#loading-latest').addClass('d-none');
+        $('#latest-carousel').removeClass('d-none');
+    },
+    // A function to be executed if the AJAX call fails
+    error: function() {
+        // Display an error message
+        alert("Error loading tutorials");
+    }
+})
+}
+
+
+/* TRASHED CODE BELOW */
+/*
 // fetch() the vids from the given API
 function populateVideos(section) { 
   // if the section is 'popular videos' ...
@@ -138,3 +323,4 @@ function populateVideos(section) {
     console.log("not popular videos")
   }
 }
+*/

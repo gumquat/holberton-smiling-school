@@ -1,10 +1,10 @@
 $(document).ready(function(){
-  PopulateQuotes();
-  PopulateTutorials();
-  PopulateLatest();
+  populateQuotes();
+  populateTutorials();
+  populateLatest();
 });
 
-function PopulateQuotes() {
+function populateQuotes() {
   $.ajax({
       url: "https://smileschool-api.hbtn.info/quotes",
       method: "GET",
@@ -42,7 +42,7 @@ function PopulateQuotes() {
   })
 }
 
-function PopulateTutorials() {
+function populateTutorials() {
   $.ajax({
       url: "https://smileschool-api.hbtn.info/popular-tutorials",
       method: "GET",
@@ -122,7 +122,7 @@ function PopulateTutorials() {
   })
 }
 
-function PopulateLatest() {
+function populateLatest() {
   $.ajax({
       url: "https://smileschool-api.hbtn.info/latest-videos",
       method: "GET",
