@@ -16,14 +16,13 @@ const latestVideos = document.querySelector("#latestVideos");
 $(document).ready(function () { // fetch() quotes on page load
   // populateQuotes if the page is any of the homepages
   console.log(window.location.pathname);
-  if (window.location.pathname == "/0-homepage.html" || window.location.pathname == "/1-homepage.html" || window.location.pathname == "/2-homepage.html") {
+  if (window.location.pathname == "/0-homepage.html" || "/1-homepage.html" || "/2-homepage.html" || "/0-pricing.html" || "/0-pricing.html") {
     loader.classList.remove("d-none");
     populateQuotes();
-    //populateTutorials;
   }
 
   //if the current page is 'pricing.html'
-  if (window.location.pathname == "/0-pricing.html" || "/1-pricing.html" || "/2-pricing.html") {
+  if (window.location.pathname == "/0-pricing.html" || "/pricing.html") {
     //remove the 'd-none' class from the loader
     loader.classList.remove("d-none");
   }
