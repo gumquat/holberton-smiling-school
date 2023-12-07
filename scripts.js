@@ -3,6 +3,18 @@ $(document).ready(function(){
   populateTutorials();
   populateLatest();
 });
+//perform on load if page is 'courses.html'
+$(document).ready(function(){
+  let onLoad = (false);
+  if (window.location.pathname === "/courses.html") {
+      populateCourses();
+  }
+
+  document.getElementById('select-keywords').addEventListener('input', PopulateCourses);
+  document.addEventListener('DOMContentLoaded', function() {
+      $('.dropdown-toggle').dropdown();
+  });
+});
 
 // Targets 'quote section'
 const quoteSection = document.querySelector("#quote-carousel")
@@ -323,3 +335,68 @@ function populateVideos(section) {
   }
 }
 */
+
+function populateCourses() {
+  $('#loading-courses').removeClass('d-none');
+  $('#course-container').addClass('d-none');
+  let counter = 0;
+  const keySelect = document.getElementById('select-keywords');
+  const topicSelect = document.getElementById('select-topic');
+  const sortSelected = document.getElementById('select-sort-by');
+
+  $.ajax({
+      url: "https://smileschool-api.hbtn.info/courses",
+      method: "GET",
+      success: function(response){
+          const courseZone = $('#course-zone');
+          response['courses'].forEach(function makeCarouselItem(data, index) {
+              if ((data['topic'] === topicSelect.textContent) || (topicSelect.textContent === "All")) {
+                  if ((data['views'] > 600 && sortSelected.textContent === "Most Viewed") || (data['star'] >= 4 && sortSelected.textContent === 'Most Popular') || (data['published_at'] > 1586730000 && sortSelected.textContent === "Most Recent")) {
+                      counter += 1;
+                      console.log(counter);
+                      const courseCol = $('<div>').addClass('col-12 col-sm-4 col-lg-3 d-flex justify-content-center');
+                      const card = $('<div>').addClass('card p-3');
+                      const thumbnail = $('<img>').addClass('card-img-top').attr('src', data['thumb_url']);
+                      const cardOverlay = $('<div>').addClass('card-img-overlay text-center');
+                      const playButton = $('<img>').addClass('mx-auto my-auto play-overlay').attr('src', 'images/play.png').attr('width', '64px');
+                      const cardBody = $('<div>').addClass('card-body');
+                      const cardTitle = $('<h5>').addClass('card-title font-weight-bold').text(data['title']);
+                      const cardPrg = $('<p>').addClass('card-text text-muted').text(data['sub-title']);
+                      const creator = $('<div>').addClass('creator d-flex align-items-center');
+                      const creatorImg = $('<img>').addClass('rounded-circle').attr('src', data['author_pic_url']).attr('width', '30px');
+                      const creatorName = $('<h6>').addClass('pl-3 m-0 main-color').text(data['author']);
+                      const cardFooter = $('<div>').addClass('info pt-3 d-flex justify-content-between');
+                      const ratingDiv = $('<div>').addClass('rating d-flex');
+                      let i;
+                      for(i = 1; i < 6; i++){
+                          if(i <= data['star']) {
+                              const fullStar = $('<img>').attr('src', 'images/star_on.png').attr('width', '15px').attr('height', '15px');
+                              ratingDiv.append(fullStar);
+                          }
+                          else {
+                              const emptyStar = $('<img>').attr('src', 'images/star_off.png').attr('width', '15px').attr('height', '15px');
+                              ratingDiv.append(emptyStar);
+                          }
+                      }
+                      const time = $('<span>').addClass('main-color').text(data['duration']);
+
+                      cardFooter.append(ratingDiv, time);
+                      creator.append(creatorImg, creatorName);
+                      cardBody.append(cardTitle, cardPrg, creator, cardFooter); 
+                      cardOverlay.append(playButton);
+                      card.append(thumbnail, cardOverlay, cardBody); 
+                      courseCol.append(card);
+                      courseZone.append(courseCol);
+                  }
+              }
+          });
+          $('.video-count').text(counter + ' videos')
+
+          $('#loading-courses').addClass('d-none');
+          $('#course-container').removeClass('d-none');
+      },
+      error: function() {
+          alert("Error loading courses");
+      }
+  })
+}
